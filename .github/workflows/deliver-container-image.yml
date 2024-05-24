@@ -84,6 +84,8 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: "true"
           COSIGN_TLOG_UPLOAD: "1"
+          COSIGN_TSA_SERVER: "https://fulcio.sigstore.dev"  # or your TSA server
+          COSIGN_REKOR_SERVER: "https://rekor.sigstore.dev"  # or your Rekor server
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} sh -c 'echo "y" | cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} | cosign sign {}@${{ steps.build-and-push.outputs.digest }}
