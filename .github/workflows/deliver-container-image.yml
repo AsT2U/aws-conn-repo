@@ -35,7 +35,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@main #v2.6.0
         with:
-          cosign-release: 'v2.2.4'
+          cosign-release: 'v1.13.1'
 
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
@@ -82,10 +82,7 @@ jobs:
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
-          COSIGN_EXPERIMENTAL: "true"
-          COSIGN_TLOG_UPLOAD: "1"
-          COSIGN_TSA_SERVER: "https://fulcio.sigstore.dev"  # or your TSA server
-          COSIGN_REKOR_SERVER: "https://rekor.sigstore.dev"  # or your Rekor server
+          COSIGN_EXPERIMENTAL: "true"  # or your Rekor server
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
